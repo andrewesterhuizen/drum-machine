@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Machine.css';
+import Screen from './Screen.js';
 import FaderPanel from './FaderPanel.js';
 import SwitchPanel from './SwitchPanel.js';
 import Switch from './Switch.js';
@@ -8,7 +9,7 @@ class Machine extends Component {
     render() {
         return (
             <div className="Machine">
-                <div className="screen"></div>
+                <Screen />
                 <div className="volume-container">
                     <FaderPanel />
                 </div>
