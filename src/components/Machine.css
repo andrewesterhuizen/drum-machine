@@ -3,6 +3,20 @@
     flex-basis: 80%;
     height: 90%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     padding: 40px;
+}
+
+.screen {
+    flex-basis: 30%; 
+    height: 150px;
+}
+
+.controls-container {
+    flex-basis: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 130px;
 }
