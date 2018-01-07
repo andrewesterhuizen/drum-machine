@@ -3,3 +3,7 @@
     width: 10px;
     height: 5px;
 }
+
+.active {
+    color: #C85438;
+}
