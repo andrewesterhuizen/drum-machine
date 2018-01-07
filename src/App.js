@@ -3,13 +3,13 @@ import './App.css';
 import Machine from './components/Machine.js'
 
 class App extends Component {
-  render() {
-    return (
+	render() {
+		return (
 		<div className="App">
-			<Machine></Machine>
+			<Machine />
 		</div>
-    );
-  }
+		);
+	}
 }
 
 export default App;

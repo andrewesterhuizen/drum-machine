@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import './Machine.css';
+import SwitchPanel from './SwitchPanel.js';
 
 class Machine extends Component {
-    constructor() {
-        super()
-    }
     render() {
-        return(
+        return (
             <div className="Machine">
-                
+                <SwitchPanel />
             </div>
         )
     }
