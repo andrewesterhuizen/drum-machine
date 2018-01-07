@@ -2,4 +2,7 @@
     background: #dadbdc;
     flex-basis: 80%;
     height: 90%;
+    display: flex;
+    justify-content: space-between;
+    padding: 40px;
 }
