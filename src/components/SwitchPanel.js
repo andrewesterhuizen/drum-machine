@@ -6,7 +6,7 @@ class SwitchPanel extends Component {
     render() {
         let switches = [];
         for(let i = 0; i < 16; i++) {
-            switches.push(<Switch key={i}/>);
+            switches.push(<Switch key={`switch-${i}`}/>);
         }
         return (
             <div className="SwitchPanel">
