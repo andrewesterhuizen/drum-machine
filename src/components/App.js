@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import Machine from './components/Machine.js'
+import Machine from './Machine.js'
 
 class App extends Component {
 	render() {
