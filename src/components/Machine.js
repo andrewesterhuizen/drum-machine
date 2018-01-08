@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './Machine.css';
-import Screen from './Screen.js';
-import VolumePanel from './VolumePanel.js';
-import Fader from './Fader.js';
-import SwitchPanel from './SwitchPanel.js';
-import Switch from './Switch.js';
+import Screen from './screen/Screen.js';
+import VolumePanel from './mixer/VolumePanel.js';
+import Fader from './mixer/Fader.js';
+import StepPanel from './switches/StepPanel.js';
+import Switch from './switches/Switch.js';
 
 class Machine extends Component {
     render() {
@@ -15,7 +15,7 @@ class Machine extends Component {
                 <Fader />
                 <div className="controls-container">
                     <Switch label={'START'}/>
-                    <SwitchPanel />
+                    <StepPanel />
                 </div>
             </div>
         )
