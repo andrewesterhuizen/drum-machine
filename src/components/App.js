@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-import Machine from './Machine.js'
+import p5DrumMachine from '../scripts/p5DrumMachine.js';
+import Machine from './Machine.js';
 
 class App extends Component {
 	render() {
