@@ -8,7 +8,7 @@ class Step extends Component {
         return (
             <div className="Step">
                 <Indicator />
-                <Switch />
+                <Switch label={this.props.label} />
             </div>
             
         )

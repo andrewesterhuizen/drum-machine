@@ -14,7 +14,7 @@ class Machine extends Component {
                 <VolumePanel />
                 <Fader />
                 <div className="controls-container">
-                    <Switch />
+                    <Switch label={'START'}/>
                     <SwitchPanel />
                 </div>
             </div>

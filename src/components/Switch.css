@@ -1,3 +1,10 @@
+.switch-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 50px;
+}
+
 .Switch {
     width: 40px;
     height: 70px;
@@ -6,4 +13,12 @@
     outline: none;
     margin-top: 10px;
     align-self: flex-end;
+}
+
+.switch-label {
+    text-align: center;
+    margin: 10px 0;
+    padding: 0;
+    flex-basis: 100%;
+    background: #CA5A3A;
 }

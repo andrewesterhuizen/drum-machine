@@ -4,7 +4,10 @@ import './Switch.css';
 class Switch extends Component {
     render() {
         return (
-            <button className="Switch"></button>
+            <div className="switch-container">
+                <button className="Switch"></button>
+                <span className="switch-label">{this.props.label}</span>
+            </div>
         )
     }
 }
