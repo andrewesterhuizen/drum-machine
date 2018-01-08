@@ -1,11 +1,12 @@
 .Machine {
     background: #dadbdc;
-    flex-basis: 80%;
+    flex-basis: 68%;
     height: 400px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding: 40px;
+    align-content: space-around;
+    padding: 20px;
 }
 
 .controls-container {

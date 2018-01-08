@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './FaderPanel.css';
+import './VolumePanel.css';
 import Fader from './Fader.js';
 
 class FaderPanel extends Component {
