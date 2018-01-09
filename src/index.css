@@ -4,3 +4,10 @@ body {
   font-family: sans-serif;
   background: #004;
 }
+
+#root {
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}

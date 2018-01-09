@@ -1,21 +1,48 @@
 import React, { Component } from 'react';
+import loadDrumMachine from '../scripts/p5DrumMachine.js';
 import './App.css';
-import p5DrumMachine from '../scripts/p5DrumMachine.js';
-import Machine from './Machine.js';
-
-let machineController;
-p5DrumMachine.then( controller => {
-	machineController = controller;
-	console.log(machineController);
-} );
+import Loading from './Loading.js';
+import Screen from './screen/Screen.js';
+import VolumePanel from './mixer/VolumePanel.js';
+import Fader from './mixer/Fader.js';
+import StepPanel from './switches/StepPanel.js';
+import Switch from './switches/Switch.js';
 
 class App extends Component {
+	constructor() {
+		super();
+		this.state = {
+			samplesLoaded: false,
+		};
+	}
+	componentWillMount() {
+		if(!this.state.samplesLoaded) {
+			loadDrumMachine.then( controller => {
+				this.setState({
+					drums: controller.drums,
+					samplesLoaded: true
+				});
+			});
+		}
+
+	}
 	render() {
-		return (
-		<div className="App">
-			<Machine />
-		</div>
-		);
+		if(!this.state.samplesLoaded) {
+			return (
+				<Loading />
+			)
+		} else {
+			return (
+				<div className="Machine">
+					<Screen />
+					<VolumePanel />
+					<Fader />
+					<div className="controls-container">
+						<Switch label={'START'} />
+						<StepPanel drums={this.state.drums} />
+					</div>
+				</div>
+			)};
 	}
 }
 
