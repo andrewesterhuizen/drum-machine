@@ -5,7 +5,7 @@ class Indicator extends Component {
     render() {
         return (
             <div>
-                <div className="Indicator"></div>
+                <div className={this.props.active ? 'Indicator active' : 'Indicator'}></div>
             </div>
         )
     }

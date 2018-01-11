@@ -7,7 +7,7 @@ class Step extends Component {
     render() {
         return (
             <div className="Step">
-                <Indicator />
+                <Indicator active={this.props.active ? 'active' : ''} />
                 <Switch label={this.props.label} />
             </div>
             
