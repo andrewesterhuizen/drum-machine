@@ -20,10 +20,11 @@ class Machine extends Component {
 					<Fader />
 					<div className="controls-container">
 						<Switch label={'START'} />
-						<StepPanel drums={this.props.drums} beat={this.props.beat}/>
+						<StepPanel drumController={this.props.drumController} beat={this.props.beat}/>
 					</div>
 				</div>
-			)};
+			)
+		};
 	}
 }
 

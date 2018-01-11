@@ -8,12 +8,22 @@ import Machine from './Machine.js';
 const sampleList = ['bd1', 'bd2', 'sd1', 'sd2','lt', 'mt', 'ht', 'rim',
 				 'cow', 'hcp', 'tamb', 'hhc', 'hho', 'crash', 'ride'];
 
-// const drumController = {
-// 	drums: [],
-// 	beat: 0
-// }
-
-
+class drumController {
+	constructor(drums) {
+		this.drums = drums;
+		this.selected = this.drums[0];
+	}
+	select(i) {
+		this.selected = this.drums[i];
+	}
+	toggleStep(i) {
+		if(this.selected.sequence[i] === 0) {
+			this.selected.sequence[i] = 1;
+		} else {
+			this.selected.sequence[i] = 0;
+		}
+	}
+}
 
 const loadDrumMachine = new Promise( resolve => {
 	const drums = [];
@@ -30,25 +40,13 @@ const loadDrumMachine = new Promise( resolve => {
 			p.noCanvas();
 			p.frameRate(60);
 			resolve({
-				drums: drums,
+				drumController: new drumController(drums),
 				machine: newp5
 			});
 		};
-		
-		// p.draw = function() {
-		// 	if(p.frameCount % 8 === 0) {
-		// 		drumController.beat++;	
-		// 		if(drumController.beat > 15) {
-		// 			drumController.beat = 0;
-					
-		// 		}	
-		// 	}
-		// };
 	};
 	newp5 = new p5(drumMachine);
 });
-
-
 
 class App extends Component {
 	constructor() {
@@ -56,37 +54,35 @@ class App extends Component {
 		this.state = {
 			samplesLoaded: false,
 			beat: 0,
-			drums: null
 		};
 	}
 	componentWillMount() {
 		if(!this.state.samplesLoaded) {
 			loadDrumMachine
 			.then( response => {
-				const drums = response.drums;
 				const machine = response.machine;
 				this.setState({
 					samplesLoaded: true,
-					drums: drums
+					drumController: response.drumController
 				});
 				machine.draw = () => {
 					if(machine.frameCount % 8 === 0) {
 						this.setState({
 							beat: this.state.beat + 1
-						})
+						});
 						if(this.state.beat > 15) {
 							this.setState({
 								beat: 0
-							})	
+							});	
 						}	
 					}
 				};
-			})
+			});
 		}
 	}
 	render() {
 		return (
-			<Machine loaded={this.state.samplesLoaded} drums={this.state.drums} beat={this.state.beat}/>
+			<Machine loaded={this.state.samplesLoaded} drumController={this.state.drumController} beat={this.state.beat} />
 		)
 	}
 }
