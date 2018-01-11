@@ -23,6 +23,13 @@ class drumController {
 			this.selected.sequence[i] = 0;
 		}
 	}
+	checkStep(beat) {
+		this.drums.forEach( drum => { 
+			if(drum.sequence[beat] === 1) {
+				drum.sample.play();		
+			}
+		})
+	}
 }
 
 const loadDrumMachine = new Promise( resolve => {
@@ -75,7 +82,9 @@ class App extends Component {
 								beat: 0
 							});	
 						}	
+						this.state.drumController.checkStep(this.state.beat)
 					}
+					
 				};
 			});
 		}
