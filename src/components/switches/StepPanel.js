@@ -18,7 +18,7 @@ class StepPanel extends Component {
                                  label={drum.name}
                                  key={`switch-${i}`}
                                  selectDrum={ () => { this.selectDrum(i) }}
-                                 toggleStep={ () => { this.toggleStep(i) }}
+                                 handleClick={ () => { this.toggleStep(i) }}
                             />
                 })}
             </div>

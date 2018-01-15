@@ -5,7 +5,7 @@ class Switch extends Component {
     render() {
         return (
             <div className="switch-container">
-                <button className="Switch" onClick={this.props.toggleStep}></button>
+                <button className="Switch" onClick={this.props.handleClick}></button>
                 <span className="switch-label" onClick={this.props.selectDrum}>{this.props.label}</span>
             </div>
         )

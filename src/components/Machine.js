@@ -19,7 +19,7 @@ class Machine extends Component {
 					<VolumePanel />
 					<Fader />
 					<div className="controls-container">
-						<Switch label={'START'} />
+						<Switch label={'START'} handleClick={this.props.togglePause} />
 						<StepPanel drumController={this.props.drumController} beat={this.props.beat}/>
 					</div>
 				</div>

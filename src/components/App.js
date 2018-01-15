@@ -61,7 +61,14 @@ class App extends Component {
 		this.state = {
 			samplesLoaded: false,
 			beat: 0,
+			paused: true
 		};
+		this.togglePause = this.togglePause.bind(this);
+	}
+	togglePause() {
+		this.setState({
+			paused: !this.state.paused
+		});
 	}
 	componentWillMount() {
 		if(!this.state.samplesLoaded) {
@@ -73,7 +80,7 @@ class App extends Component {
 					drumController: response.drumController
 				});
 				machine.draw = () => {
-					if(machine.frameCount % 8 === 0) {
+					if(!this.state.paused && machine.frameCount % 8 === 0) {
 						this.setState({
 							beat: this.state.beat + 1
 						});
@@ -91,7 +98,10 @@ class App extends Component {
 	}
 	render() {
 		return (
-			<Machine loaded={this.state.samplesLoaded} drumController={this.state.drumController} beat={this.state.beat} />
+			<Machine loaded={this.state.samplesLoaded}
+					 togglePause={this.togglePause}
+					 drumController={this.state.drumController}
+					 beat={this.state.beat} />
 		)
 	}
 }
