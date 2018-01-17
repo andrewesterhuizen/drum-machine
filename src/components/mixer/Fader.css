@@ -1,7 +1,20 @@
+.fader-container {
+	display: flex;
+	flex-direction: column;
+}
+	
 .Fader {
 	-webkit-appearance: slider-vertical;
 	margin: 10px 0;
 	width: 35px;
 	height: 120px;
 	outline: none;
+}
+
+.fader-label {
+	text-align: center;
+    margin: 10px 0;
+    padding: 0;
+    flex-basis: 10%;
+    background: #CA5A3A;	
 }

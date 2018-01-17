@@ -16,8 +16,7 @@ class Machine extends Component {
 			return (
 				<div className="Machine">
 					<Screen drums={this.props.drumController.drums}/>
-					<VolumePanel />
-					<Fader />
+					<VolumePanel drums={this.props.drumController.drums}/>
 					<div className="controls-container">
 						<Switch label={'START'} handleClick={this.props.togglePause} />
 						<StepPanel drumController={this.props.drumController} beat={this.props.beat} />
