@@ -4,33 +4,10 @@ import p5 from 'p5';
 import "p5/lib/addons/p5.sound";
 import DrumPart from '../scripts/DrumPart.js';
 import Machine from './Machine.js';
+import Loading from './Loading.js';
 
 const sampleList = ['bd1', 'bd2', 'sd1', 'sd2','lt', 'mt', 'ht', 'rim',
 				 'cow', 'hcp', 'tamb', 'hhc', 'hho', 'crash', 'ride'];
-
-class drumController {
-	constructor(drums) {
-		this.drums = drums;
-		this.selected = this.drums[0];
-	}
-	select(i) {
-		this.selected = this.drums[i];
-	}
-	toggleStep(i) {
-		if(this.selected.sequence[i] === 0) {
-			this.selected.sequence[i] = 1;
-		} else {
-			this.selected.sequence[i] = 0;
-		}
-	}
-	checkStep(beat) {
-		this.drums.forEach( drum => { 
-			if(drum.sequence[beat] === 1) {
-				drum.sample.play();		
-			}
-		})
-	}
-}
 
 const loadDrumMachine = new Promise( resolve => {
 	const drums = [];
@@ -47,8 +24,8 @@ const loadDrumMachine = new Promise( resolve => {
 			p.noCanvas();
 			p.frameRate(60);
 			resolve({
-				drumController: new drumController(drums),
-				machine: newp5
+				machine: newp5,
+				drums: drums
 			});
 		};
 	};
@@ -64,6 +41,33 @@ class App extends Component {
 			paused: true
 		};
 		this.togglePause = this.togglePause.bind(this);
+		this.selectDrum = this.selectDrum.bind(this);
+		this.toggleStep = this.toggleStep.bind(this);
+	}
+	selectDrum(i) {
+		this.setState({
+			selected: this.state.drums[i]
+		})
+		
+	}
+	toggleStep(i) {
+		let selected = this.state.selected;
+		if(selected.sequence[i] === 0) {
+			selected.sequence[i] = 1;
+		} else {
+			selected.sequence[i] = 0;
+		}
+		this.setState({
+			selected: selected
+		});
+
+	}
+	checkStep(beat) {
+		this.state.drums.forEach( drum => { 
+			if(drum.sequence[beat] === 1) {
+				drum.sample.play();		
+			}
+		});
 	}
 	togglePause() {
 		this.setState({
@@ -75,9 +79,11 @@ class App extends Component {
 			loadDrumMachine
 			.then( response => {
 				const machine = response.machine;
+				const drums = response.drums;
 				this.setState({
-					samplesLoaded: true,
-					drumController: response.drumController
+					drums: drums,
+					selected: drums[0],
+					samplesLoaded: true
 				});
 				machine.draw = () => {
 					if(!this.state.paused && machine.frameCount % 8 === 0) {
@@ -89,7 +95,7 @@ class App extends Component {
 								beat: 0
 							});	
 						}	
-						this.state.drumController.checkStep(this.state.beat);
+						this.checkStep(this.state.beat);
 					}
 					
 				};
@@ -97,12 +103,21 @@ class App extends Component {
 		}
 	}
 	render() {
-		return (
-			<Machine loaded={this.state.samplesLoaded}
-					 togglePause={this.togglePause}
-					 drumController={this.state.drumController}
-					 beat={this.state.beat} />
-		)
+		if(!this.state.samplesLoaded) {
+			return (
+				<Loading />
+			)
+		} else {
+			return (
+				<Machine drums={this.state.drums}
+						 togglePause={this.togglePause}
+						 selectDrum={this.selectDrum}
+						 toggleStep={this.toggleStep}
+						 beat={this.state.beat}
+						 selected={this.state.selected} />
+			)
+		}
+		
 	}
 }
 

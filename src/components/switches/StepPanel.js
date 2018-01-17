@@ -4,24 +4,24 @@ import Step from './Step.js';
 
 class StepPanel extends Component {
     selectDrum(i) {
-        this.props.drumController.select(i);
+        this.props.selectDrum(i);
     }
     toggleStep(i) {
-        this.props.drumController.toggleStep(i);   
+        this.props.toggleStep(i);
     }
     render() {
-        const drums = this.props.drumController.drums;
+        const drums = this.props.drums;
         return (
             <div className="StepPanel">
                 { drums.map( (drum, i) => {
-                    return <Step active={this.props.beat === i || this.props.drumController.selected.sequence[i] === 1}
+                    return <Step active={this.props.beat === i || this.props.selected.sequence[i] === 1}
                                  label={drum.name}
                                  key={`switch-${i}`}
                                  selectDrum={ () => { this.selectDrum(i) }}
                                  handleClick={ () => { this.toggleStep(i) }}
                             />
                 })}
-                <Step active={this.props.beat === 15} label="-" key={`switch-16`} />
+                <Step active={this.props.beat === 15 || this.props.selected.sequence[15] === 1} label="-" handleClick={ () => { this.toggleStep(15) }} key={`switch-16`} />
             </div>
         )
     }
