@@ -8,7 +8,7 @@ class Step extends Component {
         return (
             <div className="Step">
                 <Indicator active={this.props.active ? 'active' : ''} />
-                <Switch label={this.props.label} selectDrum={this.props.selectDrum} toggleStep={this.props.toggleStep}/>
+                <Switch label={this.props.label} selectDrum={this.props.selectDrum} handleClick={this.props.handleClick}/>
             </div>
             
         )

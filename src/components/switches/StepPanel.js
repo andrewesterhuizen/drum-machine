@@ -7,7 +7,7 @@ class StepPanel extends Component {
         this.props.drumController.select(i);
     }
     toggleStep(i) {
-        this.props.drumController.toggleStep(i);     
+        this.props.drumController.toggleStep(i);   
     }
     render() {
         const drums = this.props.drumController.drums;
@@ -21,6 +21,7 @@ class StepPanel extends Component {
                                  handleClick={ () => { this.toggleStep(i) }}
                             />
                 })}
+                <Step active={this.props.beat === 15} label="-" key={`switch-16`} />
             </div>
         )
     }

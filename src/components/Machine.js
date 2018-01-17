@@ -15,16 +15,16 @@ class Machine extends Component {
 		} else {
 			return (
 				<div className="Machine">
-					<Screen />
+					<Screen drums={this.props.drumController.drums}/>
 					<VolumePanel />
 					<Fader />
 					<div className="controls-container">
 						<Switch label={'START'} handleClick={this.props.togglePause} />
-						<StepPanel drumController={this.props.drumController} beat={this.props.beat}/>
+						<StepPanel drumController={this.props.drumController} beat={this.props.beat} />
 					</div>
 				</div>
 			)
-		};
+		}
 	}
 }
 

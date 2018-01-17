@@ -1,5 +1,10 @@
 .Screen {
     background: #a7b0b4;
-    height: 150px;
+    height: 200px;
     flex-basis: 25%;
+    font-size: 6px;
+}
+
+td {
+    padding: 0 5px;
 }

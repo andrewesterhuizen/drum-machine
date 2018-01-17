@@ -89,7 +89,7 @@ class App extends Component {
 								beat: 0
 							});	
 						}	
-						this.state.drumController.checkStep(this.state.beat)
+						this.state.drumController.checkStep(this.state.beat);
 					}
 					
 				};
