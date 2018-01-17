@@ -6,7 +6,7 @@ class StepMatrix extends Component {
     render() {
 		const stepHeaders = [];
 		for(let i = 0; i <= 16; i++) {
-			stepHeaders.push(<td key={`step-header-${i}`}>{i === 0 ? '' : i}</td>)
+			stepHeaders.push(<td key={`step-header-${i}`}>{i === 0 ? 'STEP' : i}</td>)
 		}
         return (
             <table className="StepMatrix">

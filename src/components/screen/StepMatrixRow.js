@@ -7,7 +7,7 @@ class StepMatrixRow extends Component {
             <tr className="StepMatrixRow">
 				<th>{this.props.drum.name}</th>
 				{ this.props.drum.sequence.map( (step, i) => {
-					return <td key={`step-matrix-cell-${i}`}>{step}</td>
+					return <td key={`step-matrix-cell-${i}`} className={step === 0 ? '' : 'cell-active'}></td>
 				})}
             </tr>
         )

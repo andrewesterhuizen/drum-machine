@@ -1,7 +1,7 @@
 .Machine {
     background: #dadbdc;
-    flex-basis: 72%;
-    height: 400px;
+    flex-basis: 70%;
+    height: 500px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
