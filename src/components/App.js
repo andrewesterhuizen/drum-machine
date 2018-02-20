@@ -100,6 +100,12 @@ class App extends Component {
 				};
 			});
 		}
+		document.addEventListener('keydown', e => {
+			if(e.key === ' ') {	
+				this.togglePause();
+				e.preventDefault();
+			}
+		})
 	}
 	render() {
 		if(!this.state.samplesLoaded) {
