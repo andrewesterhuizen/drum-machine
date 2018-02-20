@@ -21,7 +21,6 @@ const loadDrumMachine = new Promise( resolve => {
 		};
 		p.setup = function() {	
 			p.noCanvas();
-			p.frameRate(60);
 			resolve({
 				machine: newp5,
 				drums: drums
@@ -37,19 +36,11 @@ class App extends Component {
 		this.state = {
 			samplesLoaded: false,
 			beat: 0,
+			bpm: 100,
 			paused: true
 		};
-		this.togglePause = this.togglePause.bind(this);
-		this.selectDrum = this.selectDrum.bind(this);
-		this.toggleStep = this.toggleStep.bind(this);
 	}
-	selectDrum(i) {
-		this.setState({
-			selected: this.state.drums[i]
-		})
-		
-	}
-	toggleStep(id, step) {
+	toggleStep = (id, step) => {
 		const drums = [...this.state.drums];
 		const drum = drums[id];
 		if(drum.sequence[step] === 0) {
@@ -68,10 +59,20 @@ class App extends Component {
 			}
 		});
 	}
-	togglePause() {
+	togglePause = () => {
 		this.setState({
 			paused: !this.state.paused
 		});
+	}
+	increaseBPM = () => {
+		this.setState({
+			bpm: this.state.bpm + 1
+		})
+	}
+	decreaseBPM = () => {
+		this.setState({
+			bpm: this.state.bpm - 1
+		})
 	}
 	componentWillMount() {
 		if(!this.state.samplesLoaded) {
@@ -84,6 +85,7 @@ class App extends Component {
 					samplesLoaded: true
 				});
 				machine.draw = () => {
+					machine.frameRate(this.state.bpm / 2);
 					if(!this.state.paused && machine.frameCount % 8 === 0) {
 						this.setState({
 							beat: this.state.beat + 1
@@ -94,8 +96,7 @@ class App extends Component {
 							});	
 						}	
 						this.checkStep(this.state.beat);
-					}
-					
+					}	
 				};
 			});
 		}
@@ -108,11 +109,13 @@ class App extends Component {
 		} else {
 			return (
 				<Machine drums={this.state.drums}
-						 togglePause={this.togglePause}
-						 selectDrum={this.selectDrum}
-						 toggleStep={this.toggleStep}
-						 beat={this.state.beat}
-						 selected={this.state.selected} />
+						 		 bpm={this.state.bpm}
+								 increaseBPM={this.increaseBPM}
+								 decreaseBPM={this.decreaseBPM}
+								 togglePause={this.togglePause}
+								 selectDrum={this.selectDrum}
+								 toggleStep={this.toggleStep}
+								 beat={this.state.beat} />
 			)
 		}
 		
