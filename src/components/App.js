@@ -14,9 +14,9 @@ const loadDrumMachine = new Promise( resolve => {
 	const drumMachine = function(p) {
 		p.preload = function() {
 			p.soundFormats('wav');
-			sampleList.forEach( sample => {
+			sampleList.forEach( (sample, i) => {
 				p.loadSound(`/samples/${sample}.wav`,
-					sound => drums.push(new DrumPart(sample, sound)));
+					sound => drums.push(new DrumPart(sample, sound, i)));
 			});
 		};
 		p.setup = function() {	
@@ -49,17 +49,17 @@ class App extends Component {
 		})
 		
 	}
-	toggleStep(i) {
-		let selected = this.state.selected;
-		if(selected.sequence[i] === 0) {
-			selected.sequence[i] = 1;
+	toggleStep(id, step) {
+		const drums = [...this.state.drums];
+		const drum = drums[id];
+		if(drum.sequence[step] === 0) {
+			drum.sequence[step] = 1;
 		} else {
-			selected.sequence[i] = 0;
+			drum.sequence[step] = 0;
 		}
 		this.setState({
-			selected: selected
-		});
-
+			drums: drums
+		})
 	}
 	checkStep(beat) {
 		this.state.drums.forEach( drum => { 
@@ -80,8 +80,7 @@ class App extends Component {
 				const machine = response.machine;
 				const drums = response.drums;
 				this.setState({
-					drums: drums,
-					selected: drums[0],
+					drums, drums,
 					samplesLoaded: true
 				});
 				machine.draw = () => {

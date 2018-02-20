@@ -4,3 +4,7 @@
     height: 35px;
     width: 35px;
 }
+
+.step-button--active {
+    background: #004;
+}

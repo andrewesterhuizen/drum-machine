@@ -15,7 +15,7 @@ class Machine extends Component {
 				{/* <VolumePanel drums={this.props.drums}/> */}
 					<Switch label={'START'} handleClick={this.props.togglePause} />
 					{/* <StepPanel drums={this.props.drums} selected={this.props.selected} toggleStep={this.props.toggleStep} selectDrum={this.props.selectDrum} beat={this.props.beat} /> */}
-					{ drums.map( drum => <StepRow drum={drum} key={drum.name} /> )}
+					{ drums.map( drum => <StepRow drum={drum} key={drum.name} toggleStep={this.props.toggleStep} /> )}
 					<StepIndicatorRow beat={beat}/>
 			</div>
 		)

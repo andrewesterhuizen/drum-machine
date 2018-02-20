@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import './StepButton.css';
 
 class StepButton extends Component {
-    render() {
-        return (
-            <button className="step-button"></button>
-        )
-    }
+	render() {
+		const { drum, toggleStep, step } = this.props;
+		return (
+			<button className={drum.sequence[step] === 1 ? "step-button step-button--active" : "step-button"}
+							onClick={() => { toggleStep(drum.id, step); }}>
+			</button>
+		)
+	}
 }
 
 export default StepButton;
