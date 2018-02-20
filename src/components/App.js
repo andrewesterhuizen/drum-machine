@@ -6,8 +6,7 @@ import DrumPart from '../scripts/DrumPart.js';
 import Machine from './Machine.js';
 import Loading from './Loading.js';
 
-const sampleList = ['bd1', 'bd2', 'sd1', 'sd2','lt', 'mt', 'ht', 'rim',
-				 'cow', 'hcp', 'tamb', 'hhc', 'hho', 'crash', 'ride'];
+const sampleList = ['bd1', 'sd1', 'lt', 'mt', 'ht', 'rim', 'hcp', 'hhc', 'hho', 'ride'];
 
 const loadDrumMachine = new Promise( resolve => {
 	const drums = [];
