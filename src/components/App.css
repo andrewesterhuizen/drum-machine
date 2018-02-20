@@ -1,18 +1,9 @@
-.Machine {
-    background: #dadbdc;
-    flex-basis: 70%;
-    height: 500px;
+.drum-machine {
+    background:#DC143C;
+    width: 60%;
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    justify-content: center;
     align-content: space-around;
     padding: 20px;
-}
-
-.controls-container {
-    flex-basis: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    height: 130px;
 }
