@@ -4,13 +4,20 @@
 	align-items: center;
 	padding: 1em 0 0 0;
 }
+
 .controls__button {
 	font-size: 1.5rem;
 	padding: 0.5rem;
 	margin: 0 0.3rem;
 }
 
+.controls__button--recording {
+	background: red;
+	color: #fff;
+}
+
 .controls__bpm {
 	font-size: 1.5rem;
 	color: #fff;
 }
+

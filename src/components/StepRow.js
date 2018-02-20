@@ -28,7 +28,7 @@ class StepRow extends Component {
 										/>
 				})}
 				<Step active={this.props.beat === 15 || this.props.selected.sequence[15] === 1} label="-" handleClick={ () => { this.toggleStep(15) }} key={`switch-16`} /> */}
-				<span className="step-row__title">{drum.name}</span>
+				<span className={drum.sample.isPlaying() ? "step-row__title step-row__title--playing" : "step-row__title"}>{drum.name}</span>
 				<div className="step-row__steps">
 					{steps}
 				</div>
