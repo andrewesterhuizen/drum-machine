@@ -1,8 +1,4 @@
 import React, { Component } from 'react';
-// import Screen from './screen/Screen.js';
-// import VolumePanel from './mixer/VolumePanel.js';
-// import StepPanel from './switches/StepPanel.js';
-import Switch from './switches/Switch.js';
 import StepRow from './StepRow.js'
 import StepIndicatorRow from './StepIndicatorRow.js'
 import Controls from './Controls.js'

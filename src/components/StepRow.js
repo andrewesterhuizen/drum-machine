@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 // css 
 import './StepRow.css';
 
-
 // components 
 import StepButton from './StepButton.js';
 
