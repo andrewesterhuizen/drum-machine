@@ -1,0 +1,22 @@
+.step-indicator-row {
+	display: grid;
+	grid-gap: 0.8em;
+	grid-template-columns: repeat(16, 1fr);
+	padding-left: 46px;
+}
+
+.step-indicator {
+	background: #fff;
+	border: 0;
+	height: 35px;
+	width: 35px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 1.8em;
+	color:#DC143C;
+}
+
+.step-indicator--active {
+  background: #004;
+}
