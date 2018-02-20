@@ -16,7 +16,7 @@ const loadDrumMachine = new Promise( resolve => {
 			p.soundFormats('wav');
 			sampleList.forEach( (sample, i) => {
 				p.loadSound(`/samples/${sample}.wav`,
-					sound => drums.push(new DrumPart(sample, sound, i)));
+					sound => drums.push(new DrumPart(sample, sound)));
 			});
 		};
 		p.setup = function() {	
@@ -36,7 +36,7 @@ class App extends Component {
 		this.state = {
 			samplesLoaded: false,
 			beat: 0,
-			bpm: 100,
+			bpm: 120,
 			paused: true
 		};
 	}
@@ -74,14 +74,40 @@ class App extends Component {
 			bpm: this.state.bpm - 1
 		})
 	}
+	getRandomSequence = () => {
+		const randomSequence = [];
+
+		for( let i = 0; i < 16; i++) {
+			randomSequence[i] = Math.random() > 0.3 ? 0 : 1;
+		}
+
+		return randomSequence;
+	}
+	randomiseAll = () => {
+		const drums = [...this.state.drums];
+		drums.map(drum => drum.sequence = this.getRandomSequence());
+		this.setState({
+			drums: drums
+		})
+	}
+	resetAll = () => {
+		const drums = [...this.state.drums];
+		drums.forEach( drum => {
+			drum.sequence.fill(0);
+		})
+		this.setState({
+			drums: drums
+		})
+	}
 	componentWillMount() {
 		if(!this.state.samplesLoaded) {
 			loadDrumMachine
 			.then( response => {
 				const machine = response.machine;
 				const drums = response.drums;
+				drums.map( (drum, i) => drum.id = i)
 				this.setState({
-					drums, drums,
+					drums: drums,
 					samplesLoaded: true
 				});
 				machine.draw = () => {
@@ -119,6 +145,8 @@ class App extends Component {
 								 increaseBPM={this.increaseBPM}
 								 decreaseBPM={this.decreaseBPM}
 								 togglePause={this.togglePause}
+								 randomiseAll={this.randomiseAll}
+								 resetAll={this.resetAll}
 								 selectDrum={this.selectDrum}
 								 toggleStep={this.toggleStep}
 								 beat={this.state.beat} />
