@@ -1,6 +1,6 @@
 .drum-machine {
+    max-width: 66%;
     background:#DC143C;
-    width: 62%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
