@@ -17,13 +17,15 @@ class Controls extends Component {
 						<i className="fa fa-pause"></i>
 					</button>
 				}
-				<button className="controls__button" onClick={decreaseBPM}>
-					<i className="fa fa-minus"></i>
-				</button>
-				<span className="controls__bpm">{this.props.bpm}</span>
-				<button className="controls__button" onClick={increaseBPM}>
-					<i className="fa fa-plus"></i>
-				</button>
+				<div className="controls__tempo">
+					<button className="controls__button" onClick={decreaseBPM}>
+						<i className="fa fa-minus"></i>
+					</button>
+					<span className="controls__bpm">{this.props.bpm}</span>
+					<button className="controls__button" onClick={increaseBPM}>
+						<i className="fa fa-plus"></i>
+					</button>
+				</div>
 				<button className="controls__button" onClick={resetAll}>
 					<i className="fa fa-redo"></i>
 				</button>

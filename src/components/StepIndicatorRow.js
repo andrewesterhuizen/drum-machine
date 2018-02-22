@@ -14,7 +14,16 @@ class StepRow extends Component {
 		}
 		return (
 			<div className="step-indicator-row">
-					{indicators}    
+				<span className="step-row__title"></span>
+				<div className="step-row__steps">
+					{indicators}  
+				</div>
+				{
+					// hack for spacing
+				}
+				<button className="step-row__button">
+						<i className="fa fa-random hide"></i>
+				</button> 
 			</div>
 		)
 	}

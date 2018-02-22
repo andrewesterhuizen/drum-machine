@@ -1,9 +1,9 @@
 .drum-machine {
-    max-width: 66%;
+    flex-basis: 68%;
     background:#DC143C;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-content: space-around;
-    padding: 20px;
+    padding: 1em;
 }
