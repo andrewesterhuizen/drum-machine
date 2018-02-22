@@ -202,7 +202,8 @@ class App extends Component {
 		} else {
 			return (
 				<Machine drums={this.state.drums}
-						 		 bpm={this.state.bpm}
+								 bpm={this.state.bpm}
+								 paused={this.state.paused}
 								 increaseBPM={this.increaseBPM}
 								 decreaseBPM={this.decreaseBPM}
 								 togglePause={this.togglePause}
