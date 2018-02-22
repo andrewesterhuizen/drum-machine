@@ -2,7 +2,7 @@
   "name": "drum-machine",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://andrewesterhuizen.github.io/drum-machine/",
+  "homepage": ".",
   "dependencies": {
     "gh-pages": "^1.1.0",
     "p5": "^0.5.16",

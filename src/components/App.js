@@ -16,7 +16,7 @@ const loadDrumMachine = new Promise( resolve => {
 		p.preload = function() {
 			p.soundFormats('wav');
 			sampleList.forEach( (sample, i) => {
-				p.loadSound(`/samples/${sample}.wav`,
+				p.loadSound(`./samples/${sample}.wav`,
 				sound => drums.push(new DrumPart(sample, sound)));
 			});
 		};
