@@ -19,7 +19,8 @@ const loadDrumMachine = new Promise( resolve => {
 				sound => drums.push(new DrumPart(sample, sound)));
 			});
 		};
-		p.setup = function() {	
+		p.setup = function() {
+			p.frameRate(50);
 			p.noCanvas();
 			resolve({
 				machine: newp5,
@@ -127,19 +128,32 @@ class App extends Component {
 					drums: drums,
 					samplesLoaded: true
 				});
+
+				// copied this timing system from stackoverflow
+				let then = Date.now();
+				let now, elapsed, interval;
 				machine.draw = () => {
-					machine.frameRate(this.state.bpm / 2);
-					if(!this.state.paused && machine.frameCount % 8 === 0) {
-						this.setState({
-							beat: this.state.beat + 1
-						});
-						if(this.state.beat > 15) {
+					// 16th notes
+					interval = 1000 / this.state.bpm * 60 / 4;
+
+					now = Date.now();
+					elapsed = now - then;
+
+					if(elapsed > interval) {
+						then = now - (elapsed % interval);
+
+						if(!this.state.paused) {
 							this.setState({
-								beat: 0
-							});	
-						}	
-						this.checkStep(this.state.beat);
-					}	
+								beat: this.state.beat + 1
+							});
+							if(this.state.beat > 15) {
+								this.setState({
+									beat: 0
+								});	
+							}	
+							this.checkStep(this.state.beat);
+						}		
+					}
 				};
 			});
 		}
