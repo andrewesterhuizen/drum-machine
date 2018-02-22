@@ -21,3 +21,10 @@
 	grid-template-columns: repeat(16, 1fr)
 }
 
+.step-row__button {
+	font-size: 1.8rem;
+	padding: 0;
+	margin: 0 1rem;
+	background: 0;
+	border: 0;
+}

@@ -87,9 +87,9 @@ class App extends Component {
 
 		return randomSequence;
 	}
-	randomiseAll = () => {
+	randomise = id => {
 		const drums = [...this.state.drums];
-		drums.map(drum => drum.sequence = this.getRandomSequence());
+		drums[id].sequence = this.getRandomSequence();
 		this.setState({
 			drums: drums
 		})
@@ -221,7 +221,7 @@ class App extends Component {
 								 increaseBPM={this.increaseBPM}
 								 decreaseBPM={this.decreaseBPM}
 								 togglePause={this.togglePause}
-								 randomiseAll={this.randomiseAll}
+								 randomise={this.randomise}
 								 toggleRecording={this.toggleRecording}
 								 recording={this.state.recording}
 								 resetAll={this.resetAll}

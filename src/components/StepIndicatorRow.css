@@ -2,7 +2,7 @@
 	display: grid;
 	grid-gap: 0.8em;
 	grid-template-columns: repeat(16, 1fr);
-	padding-left: 46px;
+	margin-right: 15px;
 }
 
 .step-indicator {

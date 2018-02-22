@@ -4,7 +4,6 @@ import './Controls.css';
 class Controls extends Component {
 	render() {
 		const { togglePause, increaseBPM, decreaseBPM, randomiseAll, resetAll, toggleRecording, recording, paused } = this.props;
-		console.log(paused)
 		return (
 			<div className="controls">
 				<button className={recording ? "controls__button controls__button--recording" : "controls__button"} onClick={toggleRecording}>
@@ -24,9 +23,6 @@ class Controls extends Component {
 				<span className="controls__bpm">{this.props.bpm}</span>
 				<button className="controls__button" onClick={increaseBPM}>
 					<i className="fa fa-plus"></i>
-				</button>
-				<button className="controls__button" onClick={randomiseAll}>
-					<i className="fa fa-random"></i>
 				</button>
 				<button className="controls__button" onClick={resetAll}>
 					<i className="fa fa-redo"></i>
