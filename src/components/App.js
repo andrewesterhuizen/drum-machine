@@ -58,10 +58,8 @@ class App extends Component {
 		this.state.drums.forEach( drum => { 
 			if(drum.sequence[beat] === 1) {
 				drum.sample.play();		
-
 			}
 		});
-
 	}
 	togglePause = () => {
 		this.setState({
@@ -80,11 +78,9 @@ class App extends Component {
 	}
 	getRandomSequence = () => {
 		const randomSequence = [];
-
 		for( let i = 0; i < 16; i++) {
 			randomSequence[i] = Math.random() > 0.3 ? 0 : 1;
 		}
-
 		return randomSequence;
 	}
 	randomise = id => {
@@ -128,20 +124,16 @@ class App extends Component {
 					drums: drums,
 					samplesLoaded: true
 				});
-
 				// copied this timing system from stackoverflow
 				let then = Date.now();
 				let now, elapsed, interval;
 				machine.draw = () => {
 					// 16th notes
 					interval = 1000 / this.state.bpm * 60 / 4;
-
 					now = Date.now();
 					elapsed = now - then;
-
 					if(elapsed > interval) {
 						then = now - (elapsed % interval);
-
 						if(!this.state.paused) {
 							this.setState({
 								beat: this.state.beat + 1
@@ -235,4 +227,3 @@ class App extends Component {
 }
 
 export default App;
-
