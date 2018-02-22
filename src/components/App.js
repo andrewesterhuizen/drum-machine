@@ -7,6 +7,7 @@ import Machine from './Machine.js';
 import Loading from './Loading.js';
 
 const sampleList = ['bd1', 'sd1', 'lt', 'mt', 'ht', 'rim', 'hcp', 'hhc', 'hho', 'ride'];
+const keys = ['Q','W','E','R','T','Y','U','I','O','P']
 
 const loadDrumMachine = new Promise( resolve => {
 	const drums = [];
@@ -119,7 +120,11 @@ class App extends Component {
 			.then( response => {
 				const machine = response.machine;
 				const drums = response.drums;
-				drums.map( (drum, i) => drum.id = i)
+				drums.map( (drum, i) => {
+					drum.id = i;
+					drum.control = keys[i];
+					return drum;
+				});
 				this.setState({
 					drums: drums,
 					samplesLoaded: true

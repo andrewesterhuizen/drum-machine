@@ -19,7 +19,9 @@ class StepRow extends Component {
 		}
 		return (
 			<div className="step-row">
-					<span className={drum.sample.isPlaying() ? "step-row__title step-row__title--playing" : "step-row__title"}>{drum.name}</span>
+					<span className={drum.sample.isPlaying() ? "step-row__title step-row__title--playing" : "step-row__title"}>
+						{`${drum.control}: ${drum.name}`}
+					</span>
 					<div className="step-row__steps">
 						{steps}
 					</div>

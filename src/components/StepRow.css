@@ -5,13 +5,13 @@
 }
 
 .step-row__title {
-	margin-right: 1em;
-	width: 30px;
+	margin-right: 0.2em;
+	width: 60px;
 	transition: all 0.3s ease;
 }
 
 .step-row__title--playing {
-	background: green;
+	background: #0055ff;
 	transition: none;
 }
 
