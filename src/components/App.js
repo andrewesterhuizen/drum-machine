@@ -11,18 +11,7 @@ import Controls from "./Controls.js";
 import Sample from "../audio/Sample";
 import { fetchSample } from "../audio/utils";
 
-const sampleList = [
-  "bd1",
-  "sd1",
-  "lt",
-  "mt",
-  "ht",
-  "rim",
-  "hcp",
-  "hhc",
-  "hho",
-  "ride"
-];
+const sampleList = ["bd1", "sd1", "lt", "mt", "ht", "rim", "hcp", "hhc", "hho", "ride"];
 
 const keys = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
 
@@ -70,29 +59,29 @@ class App extends Component {
     });
   };
   initSamples(context) {
-    Promise.all(
-      sampleList.map(s => fetchSample(context, `./samples/${s}.wav`, s))
-    ).then(samples => {
-      samples.forEach((sample, id) => {
-        const s = new Sample(context, sample, id);
-        s.onPlay = sampleID => {
-          this.setState(({ isPlaying }) => ({
-            isPlaying: [...isPlaying, sampleID]
-          }));
-
-          setTimeout(() => {
+    Promise.all(sampleList.map(s => fetchSample(context, `./samples/${s}.wav`, s))).then(
+      samples => {
+        samples.forEach((sample, id) => {
+          const s = new Sample(context, sample, id);
+          s.onPlay = sampleID => {
             this.setState(({ isPlaying }) => ({
-              isPlaying: isPlaying.filter(id => id !== sampleID)
+              isPlaying: [...isPlaying, sampleID]
             }));
-          }, 200);
-        };
-        this.samples.push(s);
-      });
 
-      this.setState({
-        samplesLoaded: true
-      });
-    });
+            setTimeout(() => {
+              this.setState(({ isPlaying }) => ({
+                isPlaying: isPlaying.filter(id => id !== sampleID)
+              }));
+            }, 200);
+          };
+          this.samples.push(s);
+        });
+
+        this.setState({
+          samplesLoaded: true
+        });
+      }
+    );
   }
   initKeyListeners() {
     const keyMap = keys.reduce(

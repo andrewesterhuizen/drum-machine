@@ -1,22 +1,10 @@
 import React from "react";
 
-const Controls = ({
-  togglePause,
-  setBPM,
-  resetAll,
-  toggleRecording,
-  recording,
-  paused,
-  bpm
-}) => {
+const Controls = ({ togglePause, setBPM, resetAll, toggleRecording, recording, paused, bpm }) => {
   return (
     <div className="controls">
       <button
-        className={
-          recording
-            ? "controls__button controls__button--recording"
-            : "controls__button"
-        }
+        className={recording ? "controls__button controls__button--recording" : "controls__button"}
         onClick={toggleRecording}
       >
         <i className="fa fa-circle" />

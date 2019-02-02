@@ -33,36 +33,11 @@ const Loading = () => {
 
   return (
     <svg width={100} height={height}>
-      <circle
-        cx="20%"
-        cy={getPos(height, heightOffset, time, 0)}
-        r={4}
-        fill="#fff"
-      />
-      <circle
-        cx="35%"
-        cy={getPos(height, heightOffset, time, 1)}
-        r={4}
-        fill="#fff"
-      />
-      <circle
-        cx="50%"
-        cy={getPos(height, heightOffset, time, 2)}
-        r={4}
-        fill="#fff"
-      />
-      <circle
-        cx="65%"
-        cy={getPos(height, heightOffset, time, 3)}
-        r={4}
-        fill="#fff"
-      />
-      <circle
-        cx="80%"
-        cy={getPos(height, heightOffset, time, 4)}
-        r={4}
-        fill="#fff"
-      />
+      <circle cx="20%" cy={getPos(height, heightOffset, time, 0)} r={4} fill="#fff" />
+      <circle cx="35%" cy={getPos(height, heightOffset, time, 1)} r={4} fill="#fff" />
+      <circle cx="50%" cy={getPos(height, heightOffset, time, 2)} r={4} fill="#fff" />
+      <circle cx="65%" cy={getPos(height, heightOffset, time, 3)} r={4} fill="#fff" />
+      <circle cx="80%" cy={getPos(height, heightOffset, time, 4)} r={4} fill="#fff" />
     </svg>
   );
 };

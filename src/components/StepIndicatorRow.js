@@ -5,11 +5,7 @@ const StepRow = ({ beat }) => {
   for (let i = 0; i < 16; i++) {
     indicators.push(
       <span
-        className={
-          i === beat
-            ? "step-indicator step-indicator--active"
-            : "step-indicator"
-        }
+        className={i === beat ? "step-indicator step-indicator--active" : "step-indicator"}
         key={i}
       >
         {i + 1}
