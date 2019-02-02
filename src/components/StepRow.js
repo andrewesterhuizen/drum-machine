@@ -24,7 +24,7 @@ class StepRow extends Component {
       <div className="step-row">
         <span
           className={
-            drum.sample.isPlaying()
+            drum.isPlaying()
               ? "step-row__title step-row__title--playing"
               : "step-row__title"
           }

@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 import "./App.css";
-import p5 from "p5";
-import "p5/lib/addons/p5.sound";
-import DrumPart from "../scripts/DrumPart.js";
 import Machine from "./Machine.js";
 import Loading from "./Loading.js";
 
@@ -18,31 +15,54 @@ const sampleList = [
   "hho",
   "ride"
 ];
-const keys = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
 
-const loadDrumMachine = new Promise(resolve => {
-  const drums = [];
-  let newp5;
-  const drumMachine = function(p) {
-    p.preload = function() {
-      p.soundFormats("wav");
-      sampleList.forEach((sample, i) => {
-        p.loadSound(`./samples/${sample}.wav`, sound =>
-          drums.push(new DrumPart(sample, sound))
-        );
-      });
-    };
-    p.setup = function() {
-      p.frameRate(50);
-      p.noCanvas();
-      resolve({
-        machine: newp5,
-        drums: drums
-      });
-    };
-  };
-  newp5 = new p5(drumMachine);
-});
+class DrumPart {
+  constructor(name, sample) {
+    this.name = name;
+    this.sample = sample;
+    this.sequence = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    this._isPlaying = false;
+  }
+  play() {
+    this.sample.play();
+    this._isPlaying = true;
+    setTimeout(() => {
+      this._isPlaying = false;
+    }, 200);
+  }
+  isPlaying() {
+    return this._isPlaying;
+  }
+}
+
+const fetchSample = (context, path, name) =>
+  new Promise((resolve, reject) =>
+    fetch(path)
+      .then(r => r.arrayBuffer())
+      .then(buffer => context.decodeAudioData(buffer))
+      .then(buffer => resolve({ buffer, name }))
+      .catch(err => reject(err))
+  );
+
+class AudioSample {
+  constructor(context, sample) {
+    this.context = context;
+    this.buffer = sample.buffer;
+    this.name = sample.name;
+  }
+  play() {
+    // create buffer and connect to context
+    const source = this.context.createBufferSource();
+    source.buffer = this.buffer;
+
+    source.connect(this.context.destination);
+
+    // play sample
+    source.start();
+  }
+}
+
+const keys = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
 
 class App extends Component {
   constructor() {
@@ -52,9 +72,14 @@ class App extends Component {
       beat: 0,
       bpm: 120,
       paused: true,
-      recording: false
+      recording: false,
+      sequences: new Array(8).fill(new Array(8).fill(0))
     };
   }
+  context = null;
+  samples = [];
+
+  then = Date.now();
   toggleStep = (id, step) => {
     const drums = [...this.state.drums];
     const drum = drums[id];
@@ -70,7 +95,7 @@ class App extends Component {
   checkStep(beat) {
     this.state.drums.forEach(drum => {
       if (drum.sequence[beat] === 1) {
-        drum.sample.play();
+        drum.play();
       }
     });
   }
@@ -126,45 +151,58 @@ class App extends Component {
       });
     }
   };
-  componentWillMount() {
-    if (!this.state.samplesLoaded) {
-      loadDrumMachine.then(response => {
-        const machine = response.machine;
-        const drums = response.drums;
-        drums.map((drum, i) => {
-          drum.id = i;
-          drum.control = keys[i];
-          return drum;
-        });
-        this.setState({
-          drums: drums,
-          samplesLoaded: true
-        });
-        // copied this timing system from stackoverflow
-        let then = Date.now();
-        let now, elapsed, interval;
-        machine.draw = () => {
-          // 16th notes
-          interval = ((1000 / this.state.bpm) * 60) / 4;
-          now = Date.now();
-          elapsed = now - then;
-          if (elapsed > interval) {
-            then = now - (elapsed % interval);
-            if (!this.state.paused) {
-              this.setState({
-                beat: this.state.beat + 1
-              });
-              if (this.state.beat > 15) {
-                this.setState({
-                  beat: 0
-                });
-              }
-              this.checkStep(this.state.beat);
-            }
-          }
-        };
+  componentDidMount() {
+    const context = new AudioContext();
+    this.context = context;
+
+    Promise.all(
+      sampleList.map(s => fetchSample(context, `./samples/${s}.wav`, s))
+    ).then(samples => {
+      samples.forEach(sample =>
+        this.samples.push(new AudioSample(context, sample))
+      );
+
+      const drums = this.samples.map((sample, i) => {
+        const d = new DrumPart(sample.name, sample);
+        d.id = i;
+        d.control = keys[i];
+
+        return d;
       });
+      this.setState({
+        drums: drums,
+        samplesLoaded: true
+      });
+    });
+
+    this.initKeyListeners();
+    this.update();
+    this.forceUpdate();
+  }
+  update = () => {
+    this.interval = ((1000 / this.state.bpm) * 60) / 4;
+    this.now = Date.now();
+    this.elapsed = this.now - this.then;
+    if (this.elapsed > this.interval) {
+      this.then = this.now - (this.elapsed % this.interval);
+      if (!this.state.paused) {
+        this.setState({
+          beat: this.state.beat + 1
+        });
+        if (this.state.beat > 15) {
+          this.setState({
+            beat: 0
+          });
+        }
+        this.checkStep(this.state.beat);
+      }
     }
+
+    requestAnimationFrame(() => {
+      this.update();
+    });
+  };
+  initKeyListeners() {
     document.addEventListener("keydown", e => {
       const drums = this.state.drums;
       e.preventDefault();
@@ -174,45 +212,46 @@ class App extends Component {
           this.togglePause();
           break;
         case "q":
-          drums[0].sample.play();
+          drums[0].play();
           this.recordStep(0);
           break;
         case "w":
-          drums[1].sample.play();
+          drums[1].play();
           this.recordStep(1);
           break;
         case "e":
-          drums[2].sample.play();
+          drums[2].play();
           this.recordStep(2);
           break;
         case "r":
-          drums[3].sample.play();
+          drums[3].play();
           this.recordStep(3);
           break;
         case "t":
-          drums[4].sample.play();
+          drums[4].play();
           this.recordStep(4);
           break;
         case "y":
-          drums[5].sample.play();
+          drums[5].play();
           this.recordStep(5);
           break;
         case "u":
-          drums[6].sample.play();
+          drums[6].play();
           this.recordStep(6);
           break;
         case "i":
-          drums[7].sample.play();
+          drums[7].play();
           this.recordStep(7);
           break;
         case "o":
-          drums[8].sample.play();
+          drums[8].play();
           this.recordStep(8);
           break;
         case "p":
-          drums[9].sample.play();
+          drums[9].play();
           this.recordStep(9);
           break;
+        default:
       }
     });
   }
