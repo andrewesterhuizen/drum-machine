@@ -1,7 +1,6 @@
-https://andrewesterhuizen.github.io/drum-machine/
+[drum.cool](drum.cool)
 
 TODO:
-
 - tests
 - swap p5 for web audio
 - update ui
