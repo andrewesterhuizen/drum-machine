@@ -1,17 +1,23 @@
 import React from "react";
 
-// components
-import StepButton from "./StepButton.js";
-
-const StepRow = ({ drum, toggleStep, randomise }) => {
+const StepRow = ({
+  onStepClick,
+  onRandomiseClick,
+  isPlaying,
+  sequence,
+  title
+}) => {
   const steps = [];
-  for (let i = 0; i < 16; i++) {
+  for (let step = 0; step < 16; step++) {
+    const cn = sequence[step]
+      ? "step-button step-button--active"
+      : "step-button";
+
     steps.push(
-      <StepButton
-        drum={drum}
-        step={i}
-        toggleStep={toggleStep}
-        key={`${drum.name}-step-${i}`}
+      <button
+        key={`${title}-step-${step}`}
+        className={cn}
+        onClick={() => onStepClick(step)}
       />
     );
   }
@@ -19,20 +25,15 @@ const StepRow = ({ drum, toggleStep, randomise }) => {
     <div className="step-row">
       <span
         className={
-          drum.isPlaying()
+          isPlaying
             ? "step-row__title step-row__title--playing"
             : "step-row__title"
         }
       >
-        {`${drum.control}: ${drum.name}`}
+        {title}
       </span>
       <div className="step-row__steps">{steps}</div>
-      <button
-        className="step-row__button"
-        onClick={() => {
-          randomise(drum.id);
-        }}
-      >
+      <button className="step-row__button" onClick={onRandomiseClick}>
         <i className="fa fa-random" />
       </button>
     </div>

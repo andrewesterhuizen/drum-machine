@@ -8,8 +8,7 @@ import StepIndicatorRow from "./StepIndicatorRow.js";
 import Controls from "./Controls.js";
 
 // Audio
-import AudioSample from "../audio/AudioSample";
-import DrumPart from "../audio/DrumPart";
+import Sample from "../audio/Sample";
 import { fetchSample } from "../audio/utils";
 
 const sampleList = [
@@ -34,7 +33,8 @@ class App extends Component {
     bpm: 120,
     paused: true,
     recording: false,
-    sequences: new Array(10).fill(new Array(16).fill(0))
+    sequences: new Array(10).fill().map(_ => new Array(16).fill(false)),
+    isPlaying: []
   };
   samples = [];
   then = Date.now();
@@ -73,19 +73,23 @@ class App extends Component {
     Promise.all(
       sampleList.map(s => fetchSample(context, `./samples/${s}.wav`, s))
     ).then(samples => {
-      samples.forEach(sample =>
-        this.samples.push(new AudioSample(context, sample))
-      );
+      samples.forEach((sample, id) => {
+        const s = new Sample(context, sample, id);
+        s.onPlay = sampleID => {
+          this.setState(({ isPlaying }) => ({
+            isPlaying: [...isPlaying, sampleID]
+          }));
 
-      const drums = this.samples.map((sample, i) => {
-        const d = new DrumPart(sample.name, sample);
-        d.id = i;
-        d.control = keys[i];
-
-        return d;
+          setTimeout(() => {
+            this.setState(({ isPlaying }) => ({
+              isPlaying: isPlaying.filter(id => id !== sampleID)
+            }));
+          }, 200);
+        };
+        this.samples.push(s);
       });
+
       this.setState({
-        drums: drums,
         samplesLoaded: true
       });
     });
@@ -95,7 +99,7 @@ class App extends Component {
       (p, k, i) => ({
         ...p,
         [k]: () => {
-          this.state.drums[i].play(i);
+          this.samples[i].play();
           this.recordStep(i);
         }
       }),
@@ -115,22 +119,13 @@ class App extends Component {
     });
   }
   toggleStep = (id, step) => {
-    const drums = [...this.state.drums];
-    const drum = drums[id];
-    if (drum.sequence[step] === 0) {
-      drum.sequence[step] = 1;
-    } else {
-      drum.sequence[step] = 0;
-    }
-    this.setState({
-      drums: drums
-    });
+    const sequences = [...this.state.sequences];
+    sequences[id][step] = !sequences[id][step];
+    this.setState({ sequences });
   };
   checkStep(beat) {
-    this.state.drums.forEach(drum => {
-      if (drum.sequence[beat] === 1) {
-        drum.play();
-      }
+    this.state.sequences.forEach((sequence, id) => {
+      if (sequence[beat]) this.samples[id].play();
     });
   }
   togglePause = () => {
@@ -161,19 +156,13 @@ class App extends Component {
     return randomSequence;
   };
   randomise = id => {
-    const drums = [...this.state.drums];
-    drums[id].sequence = this.getRandomSequence();
-    this.setState({
-      drums: drums
-    });
+    const sequences = [...this.state.sequences];
+    sequences[id] = this.getRandomSequence();
+    this.setState({ sequences });
   };
   resetAll = () => {
-    const drums = [...this.state.drums];
-    drums.forEach(drum => {
-      drum.sequence.fill(0);
-    });
     this.setState({
-      drums: drums
+      sequences: new Array(10).fill().map(_ => new Array(16).fill(false))
     });
   };
   toggleRecording = () => {
@@ -181,30 +170,32 @@ class App extends Component {
       recording: !this.state.recording
     });
   };
-  recordStep = drumId => {
+  recordStep = id => {
     if (!this.state.paused && this.state.recording) {
-      const drums = [...this.state.drums];
-      drums[drumId].sequence[this.state.beat] = 1;
-      this.setState({
-        drums: drums
-      });
+      const sequences = [...this.state.sequences];
+      sequences[id][this.state.beat] = 1;
+      this.setState({ sequences });
     }
   };
-
   render() {
     if (!this.state.samplesLoaded) {
       return <Loading />;
     } else {
       return (
         <div className="drum-machine">
-          {this.state.drums.map(drum => (
-            <StepRow
-              drum={drum}
-              key={drum.name}
-              toggleStep={this.toggleStep}
-              randomise={this.randomise}
-            />
-          ))}
+          {this.state.sequences.map((sequence, i) => {
+            const sample = this.samples[i];
+            return (
+              <StepRow
+                key={sample.id}
+                onStepClick={step => this.toggleStep(sample.id, step)}
+                onRandomiseClick={() => this.randomise(sample.id)}
+                isPlaying={this.state.isPlaying.includes(sample.id)}
+                sequence={sequence}
+                title={`${keys[sample.id]}: ${sample.name}`}
+              />
+            );
+          })}
           <StepIndicatorRow beat={this.state.beat} />
           <Controls
             bpm={this.state.bpm}

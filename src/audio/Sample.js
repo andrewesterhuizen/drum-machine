@@ -1,8 +1,9 @@
-export default class AudioSample {
-  constructor(context, sample) {
+export default class Sample {
+  constructor(context, sample, id) {
     this.context = context;
     this.buffer = sample.buffer;
     this.name = sample.name;
+    this.id = id;
   }
   play() {
     // create buffer and connect to context
@@ -13,5 +14,9 @@ export default class AudioSample {
 
     // play sample
     source.start();
+
+    if (this.onPlay) {
+      this.onPlay(this.id);
+    }
   }
 }
