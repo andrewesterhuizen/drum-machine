@@ -1,7 +1,16 @@
 import React, { Component } from "react";
 import "./App.css";
-import Machine from "./Machine.js";
+
+// Components
 import Loading from "./Loading.js";
+import StepRow from "./StepRow.js";
+import StepIndicatorRow from "./StepIndicatorRow.js";
+import Controls from "./Controls.js";
+
+// Audio
+import AudioSample from "../audio/AudioSample";
+import DrumPart from "../audio/DrumPart";
+import { fetchSample } from "../audio/utils";
 
 const sampleList = [
   "bd1",
@@ -16,70 +25,95 @@ const sampleList = [
   "ride"
 ];
 
-class DrumPart {
-  constructor(name, sample) {
-    this.name = name;
-    this.sample = sample;
-    this.sequence = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-    this._isPlaying = false;
-  }
-  play() {
-    this.sample.play();
-    this._isPlaying = true;
-    setTimeout(() => {
-      this._isPlaying = false;
-    }, 200);
-  }
-  isPlaying() {
-    return this._isPlaying;
-  }
-}
-
-const fetchSample = (context, path, name) =>
-  new Promise((resolve, reject) =>
-    fetch(path)
-      .then(r => r.arrayBuffer())
-      .then(buffer => context.decodeAudioData(buffer))
-      .then(buffer => resolve({ buffer, name }))
-      .catch(err => reject(err))
-  );
-
-class AudioSample {
-  constructor(context, sample) {
-    this.context = context;
-    this.buffer = sample.buffer;
-    this.name = sample.name;
-  }
-  play() {
-    // create buffer and connect to context
-    const source = this.context.createBufferSource();
-    source.buffer = this.buffer;
-
-    source.connect(this.context.destination);
-
-    // play sample
-    source.start();
-  }
-}
-
-const keys = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
+const keys = ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"];
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      samplesLoaded: false,
-      beat: 0,
-      bpm: 120,
-      paused: true,
-      recording: false,
-      sequences: new Array(8).fill(new Array(8).fill(0))
-    };
-  }
-  context = null;
+  state = {
+    samplesLoaded: false,
+    beat: 0,
+    bpm: 120,
+    paused: true,
+    recording: false,
+    sequences: new Array(10).fill(new Array(16).fill(0))
+  };
   samples = [];
-
   then = Date.now();
+  componentDidMount() {
+    const context = new AudioContext();
+
+    this.initSamples(context);
+    this.initKeyListeners();
+    this.update();
+    this.forceUpdate();
+  }
+  update = () => {
+    this.interval = ((1000 / this.state.bpm) * 60) / 4;
+    this.now = Date.now();
+    this.elapsed = this.now - this.then;
+    if (this.elapsed > this.interval) {
+      this.then = this.now - (this.elapsed % this.interval);
+      if (!this.state.paused) {
+        this.setState({
+          beat: this.state.beat + 1
+        });
+        if (this.state.beat > 15) {
+          this.setState({
+            beat: 0
+          });
+        }
+        this.checkStep(this.state.beat);
+      }
+    }
+
+    requestAnimationFrame(() => {
+      this.update();
+    });
+  };
+  initSamples(context) {
+    Promise.all(
+      sampleList.map(s => fetchSample(context, `./samples/${s}.wav`, s))
+    ).then(samples => {
+      samples.forEach(sample =>
+        this.samples.push(new AudioSample(context, sample))
+      );
+
+      const drums = this.samples.map((sample, i) => {
+        const d = new DrumPart(sample.name, sample);
+        d.id = i;
+        d.control = keys[i];
+
+        return d;
+      });
+      this.setState({
+        drums: drums,
+        samplesLoaded: true
+      });
+    });
+  }
+  initKeyListeners() {
+    const keyMap = keys.reduce(
+      (p, k, i) => ({
+        ...p,
+        [k]: () => {
+          this.state.drums[i].play(i);
+          this.recordStep(i);
+        }
+      }),
+      {}
+    );
+
+    keyMap[" "] = () => {
+      this.togglePause();
+    };
+
+    document.addEventListener("keydown", e => {
+      e.preventDefault();
+
+      if (e.key in keyMap) {
+        keyMap[e.key]();
+      }
+    });
+  }
   toggleStep = (id, step) => {
     const drums = [...this.state.drums];
     const drum = drums[id];
@@ -112,6 +146,11 @@ class App extends Component {
   decreaseBPM = () => {
     this.setState({
       bpm: this.state.bpm - 1
+    });
+  };
+  setBPM = newBPM => {
+    this.setState({
+      bpm: newBPM
     });
   };
   getRandomSequence = () => {
@@ -151,130 +190,34 @@ class App extends Component {
       });
     }
   };
-  componentDidMount() {
-    const context = new AudioContext();
-    this.context = context;
 
-    Promise.all(
-      sampleList.map(s => fetchSample(context, `./samples/${s}.wav`, s))
-    ).then(samples => {
-      samples.forEach(sample =>
-        this.samples.push(new AudioSample(context, sample))
-      );
-
-      const drums = this.samples.map((sample, i) => {
-        const d = new DrumPart(sample.name, sample);
-        d.id = i;
-        d.control = keys[i];
-
-        return d;
-      });
-      this.setState({
-        drums: drums,
-        samplesLoaded: true
-      });
-    });
-
-    this.initKeyListeners();
-    this.update();
-    this.forceUpdate();
-  }
-  update = () => {
-    this.interval = ((1000 / this.state.bpm) * 60) / 4;
-    this.now = Date.now();
-    this.elapsed = this.now - this.then;
-    if (this.elapsed > this.interval) {
-      this.then = this.now - (this.elapsed % this.interval);
-      if (!this.state.paused) {
-        this.setState({
-          beat: this.state.beat + 1
-        });
-        if (this.state.beat > 15) {
-          this.setState({
-            beat: 0
-          });
-        }
-        this.checkStep(this.state.beat);
-      }
-    }
-
-    requestAnimationFrame(() => {
-      this.update();
-    });
-  };
-  initKeyListeners() {
-    document.addEventListener("keydown", e => {
-      const drums = this.state.drums;
-      e.preventDefault();
-
-      switch (e.key) {
-        case " ":
-          this.togglePause();
-          break;
-        case "q":
-          drums[0].play();
-          this.recordStep(0);
-          break;
-        case "w":
-          drums[1].play();
-          this.recordStep(1);
-          break;
-        case "e":
-          drums[2].play();
-          this.recordStep(2);
-          break;
-        case "r":
-          drums[3].play();
-          this.recordStep(3);
-          break;
-        case "t":
-          drums[4].play();
-          this.recordStep(4);
-          break;
-        case "y":
-          drums[5].play();
-          this.recordStep(5);
-          break;
-        case "u":
-          drums[6].play();
-          this.recordStep(6);
-          break;
-        case "i":
-          drums[7].play();
-          this.recordStep(7);
-          break;
-        case "o":
-          drums[8].play();
-          this.recordStep(8);
-          break;
-        case "p":
-          drums[9].play();
-          this.recordStep(9);
-          break;
-        default:
-      }
-    });
-  }
   render() {
     if (!this.state.samplesLoaded) {
       return <Loading />;
     } else {
       return (
-        <Machine
-          drums={this.state.drums}
-          bpm={this.state.bpm}
-          paused={this.state.paused}
-          increaseBPM={this.increaseBPM}
-          decreaseBPM={this.decreaseBPM}
-          togglePause={this.togglePause}
-          randomise={this.randomise}
-          toggleRecording={this.toggleRecording}
-          recording={this.state.recording}
-          resetAll={this.resetAll}
-          selectDrum={this.selectDrum}
-          toggleStep={this.toggleStep}
-          beat={this.state.beat}
-        />
+        <div className="drum-machine">
+          {this.state.drums.map(drum => (
+            <StepRow
+              drum={drum}
+              key={drum.name}
+              toggleStep={this.toggleStep}
+              randomise={this.randomise}
+            />
+          ))}
+          <StepIndicatorRow beat={this.state.beat} />
+          <Controls
+            bpm={this.state.bpm}
+            togglePause={this.togglePause}
+            paused={this.state.paused}
+            increaseBPM={this.increaseBPM}
+            decreaseBPM={this.decreaseBPM}
+            setBPM={this.setBPM}
+            resetAll={this.resetAll}
+            toggleRecording={this.toggleRecording}
+            recording={this.state.recording}
+          />
+        </div>
       );
     }
   }

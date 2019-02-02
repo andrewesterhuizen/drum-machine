@@ -1,3 +1,17 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background: #004;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .drum-machine {
   flex-basis: 68%;
   background: #dc143c;
@@ -6,4 +20,104 @@
   justify-content: center;
   align-content: space-around;
   padding: 1em;
+}
+
+/* StepRow */
+.step-row {
+  display: flex;
+  align-items: center;
+  flex-basis: 100%;
+}
+
+.step-row__title {
+  margin-right: 0.2em;
+  width: 60px;
+  transition: all 0.3s ease;
+}
+
+.step-row__title--playing {
+  background: #0055ff;
+  transition: none;
+}
+
+.step-row__steps {
+  flex-basis: 100%;
+  display: flex;
+}
+
+.step-row__button {
+  font-size: 1.8rem;
+  padding: 0;
+  margin: 0 1rem;
+  background: 0;
+  border: 0;
+}
+
+/* StepButton */
+.step-button {
+  background: #fff;
+  border: 0;
+  margin: 0.2rem 0.3rem;
+  flex-basis: 100%;
+  height: 35px;
+}
+
+.step-button--active {
+  background: #004;
+}
+
+/* StepIndicatorRow */
+.step-indicator-row {
+  flex-basis: 100%;
+  display: flex;
+}
+
+.step-indicator {
+  background: #fff;
+  border: 0;
+  flex-basis: 100%;
+  margin: 0.3rem;
+  min-width: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.8em;
+  color: #dc143c;
+}
+
+.step-indicator--active {
+  background: #004;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+/* Controls */
+.controls {
+  flex-basis: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.controls__button {
+  font-size: 1.8rem;
+  padding: 0.5rem;
+  margin: 1rem 1rem 0 1rem;
+  background: 0;
+  border: 0;
+}
+
+.controls__button--recording {
+  color: #860016;
+}
+
+.controls__bpm {
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+.hidden {
+  display: none;
 }
