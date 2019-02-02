@@ -22,7 +22,8 @@ class App extends Component {
     paused: true,
     recording: false,
     sequences: initSequences(),
-    isPlaying: []
+    isPlaying: [],
+    selected: 0
   };
   samples = [];
   then = Date.now();
@@ -81,6 +82,7 @@ class App extends Component {
   initKeyListeners() {
     const handleSampleKeydown = id => {
       this.samples[id].play();
+      this.setState({ selected: id });
       this.recordStep(id);
     };
 
@@ -122,10 +124,13 @@ class App extends Component {
       this.setState({ sequences });
     }
   };
+  setVolume = value => {
+    this.samples[this.state.selected].volume = value;
+  };
   render() {
     if (!this.state.samplesLoaded) return <Loading />;
 
-    const { beat, bpm, paused, recording, sequences, isPlaying } = this.state;
+    const { beat, bpm, paused, recording, sequences, isPlaying, selected } = this.state;
 
     const stepRows = sequences.map((sequence, i) => {
       const sample = this.samples[i];
@@ -137,14 +142,13 @@ class App extends Component {
           isPlaying={isPlaying.includes(sample.id)}
           sequence={sequence}
           title={`${keys[sample.id]}: ${sample.name}`}
+          selected={sample.id === selected}
         />
       );
     });
 
     return (
       <div className="drum-machine">
-        {stepRows}
-        <StepIndicatorRow beat={beat} />
         <Controls
           bpm={bpm}
           togglePause={this.togglePause}
@@ -153,7 +157,11 @@ class App extends Component {
           resetAll={this.resetAll}
           toggleRecording={this.toggleRecording}
           recording={recording}
+          selectedSample={this.samples[this.state.selected]}
+          setVolume={this.setVolume}
         />
+        {stepRows}
+        <StepIndicatorRow beat={beat} />
       </div>
     );
   }

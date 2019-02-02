@@ -14,3 +14,13 @@ export const initSequences = (rows = 10, steps = 16) => {
 export const getRandomSequence = (steps = 16) => {
   return new Array(steps).fill().map(_ => Math.random() < 0.3);
 };
+
+export const makeDistortionCurve = amount => {
+  var samples = 44100;
+  var curve = new Float32Array(samples);
+  for (let i = 0; i < samples; ++i) {
+    const x = (i * 2) / samples - 1;
+    curve[i] = ((3 + amount) * x * 20 * (Math.PI / 180)) / (Math.PI + amount * Math.abs(x));
+  }
+  return curve;
+};

@@ -29,6 +29,10 @@ body {
   flex-basis: 100%;
 }
 
+.step-row--selected {
+  background: #00d8d6;
+}
+
 .step-row__title {
   margin-right: 0.2em;
   width: 60px;
@@ -97,24 +101,38 @@ body {
 .controls {
   flex-basis: 100%;
   display: flex;
-  justify-content: space-around;
   align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.controls__left {
+  display: flex;
+}
+
+.controls__right {
+  background: #00d8d6;
+  display: flex;
+}
+
+.controls__slider-container {
+  margin-left: 10px;
 }
 
 .controls__button {
-  font-size: 1.8rem;
+  font-size: 1rem;
   padding: 0.5rem;
-  margin: 1rem 1rem 0 1rem;
+  margin: 0;
   background: 0;
   border: 0;
 }
 
 .controls__button--recording {
-  color: #860016;
+  color: red;
 }
 
 .controls__bpm {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
   color: #fff;
 }
 
