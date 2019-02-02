@@ -2,8 +2,7 @@ https://andrewesterhuizen.github.io/drum-machine/
 
 TODO:
 
-tests
-
+- tests
 - swap p5 for web audio
 - update ui
 - performance optimizations
