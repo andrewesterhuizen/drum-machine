@@ -80,7 +80,7 @@ class App extends Component {
   initKeyListeners() {
     const handleSampleKeydown = id => {
       this.samples[id].play();
-      this.setState({ selected: id });
+      this.selectSample(id);
       this.recordStep(id);
     };
 
@@ -96,6 +96,9 @@ class App extends Component {
       if (e.key in keyMap) keyMap[e.key]();
     });
   }
+  selectSample = id => {
+    this.setState({ selected: id });
+  };
   toggleStep = (id, step) => {
     const sequences = [...this.state.sequences];
     sequences[id][step] = !sequences[id][step];
@@ -131,6 +134,11 @@ class App extends Component {
   setVolume = value => {
     this.samples[this.state.selected].volume = value;
   };
+  handleTitleClick = id => {
+    this.selectSample(id);
+    this.samples[id].play();
+    this.recordStep(id);
+  };
   render() {
     if (!this.state.samplesLoaded) return <Loading />;
 
@@ -141,6 +149,7 @@ class App extends Component {
       return (
         <StepRow
           key={sample.id}
+          onTitleClick={() => this.handleTitleClick(sample.id)}
           onStepClick={step => this.toggleStep(sample.id, step)}
           onRandomiseClick={() => this.randomise(sample.id)}
           isPlaying={isPlaying.includes(sample.id)}
