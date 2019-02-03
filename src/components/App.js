@@ -30,30 +30,28 @@ class App extends Component {
   componentDidMount() {
     const context = new AudioContext();
     this.initSamples(context);
+    this.initWorker();
     this.initKeyListeners();
-
-    // start update loop
-    this.update();
   }
-  update = () => {
-    this.interval = ((1000 / this.state.bpm) * 60) / 4;
-    this.now = Date.now();
-    this.elapsed = this.now - this.then;
-
-    if (this.elapsed > this.interval) {
-      this.then = this.now - (this.elapsed % this.interval);
-
-      if (!this.state.paused) {
-        this.setState(({ beat }) => ({ beat: beat + 1 }));
-
-        if (this.state.beat > 15) this.setState({ beat: 0 });
-
-        this.handleSequencerPlay(this.state.beat);
-      }
+  initWorker() {
+    if (!window.Worker) {
+      // TODO: handle not supported
+      return;
     }
+    const worker = new Worker("worker.js");
+    this.worker = worker;
 
-    requestAnimationFrame(this.update);
-  };
+    worker.onmessage = e => {
+      const message = e.data;
+      switch (message.type) {
+        case "BEAT":
+          this.setState({ beat: message.payload });
+          this.handleSequencerPlay(message.payload);
+          break;
+        default:
+      }
+    };
+  }
   initSamples(context) {
     const handleSamplePlay = sampleID => {
       this.setState(({ isPlaying }) => ({ isPlaying: [...isPlaying, sampleID] }));
@@ -108,8 +106,14 @@ class App extends Component {
       if (sequence[beat]) this.samples[id].play();
     });
   }
-  togglePause = () => this.setState(({ paused }) => ({ paused: !paused }));
-  setBPM = newBPM => this.setState({ bpm: newBPM });
+  togglePause = () => {
+    this.setState(({ paused }) => ({ paused: !paused }));
+    this.worker.postMessage({ type: "TOGGLE_PAUSE" });
+  };
+  setBPM = bpm => {
+    this.setState({ bpm });
+    this.worker.postMessage({ type: "SET_BPM", payload: bpm });
+  };
   randomise = id => {
     const sequences = [...this.state.sequences];
     sequences[id] = getRandomSequence();
