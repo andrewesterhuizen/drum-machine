@@ -6,4 +6,3 @@ TODO:
 - update ui
 - performance optimizations
 - more drum kits
-- volume and pitch controls
