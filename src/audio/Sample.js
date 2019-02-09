@@ -9,7 +9,7 @@ export default class Sample {
     this.id = id;
     this.volume = 0.8;
     this.pitch = 1;
-    this.filter = 100;
+    this.filter = 10000;
     this.drive = 0;
   }
   play() {
@@ -24,12 +24,12 @@ export default class Sample {
 
     const filter = this.context.createBiquadFilter();
     filter.type = "lowpass";
-    filter.frequency.value = this.filter * 100;
+    filter.frequency.value = this.filter;
 
     const drive = this.context.createWaveShaper();
     let curve = Sample.distortionCurveCache[this.drive];
     if (!curve) {
-      curve = makeDistortionCurve(this.drive);
+      curve = makeDistortionCurve(this.drive * 10);
       Sample.distortionCurveCache[this.drive] = curve;
     }
 

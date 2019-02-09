@@ -1,3 +1,7 @@
+* {
+  user-select: none;
+}
+
 :root {
   --dark-blue: #0a2463;
   --light-blue: #247ba0;
@@ -125,8 +129,12 @@ body {
   display: flex;
 }
 
-.controls__slider-container {
-  margin-left: 10px;
+.controls__rotary-container {
+  font-size: 0.9rem;
+  margin: 0 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .controls__button {
