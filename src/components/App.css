@@ -33,6 +33,7 @@ body {
   justify-content: center;
   align-content: space-around;
   padding: 0.5rem;
+  max-width: 800px;
 }
 
 /* StepRow */
