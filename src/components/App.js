@@ -117,9 +117,9 @@ class App extends Component {
     this.setState({ bpm });
     this.worker.postMessage({ type: "SET_BPM", payload: bpm });
   };
-  randomise = id => {
+  randomise = () => {
     const sequences = [...this.state.sequences];
-    sequences[id] = getRandomSequence();
+    sequences[this.state.selected] = getRandomSequence();
     this.setState({ sequences });
   };
   resetAll = () => this.setState({ sequences: initSequences() });
@@ -151,7 +151,6 @@ class App extends Component {
           key={sample.id}
           onTitleClick={() => this.handleTitleClick(sample.id)}
           onStepClick={step => this.toggleStep(sample.id, step)}
-          onRandomiseClick={() => this.randomise(sample.id)}
           isPlaying={isPlaying.includes(sample.id)}
           sequence={sequence}
           title={`${keys[sample.id]}: ${sample.name}`}
@@ -172,6 +171,7 @@ class App extends Component {
           recording={recording}
           selectedSample={this.samples[this.state.selected]}
           setVolume={this.setVolume}
+          onRandomiseClick={this.randomise}
         />
         {stepRows}
         <StepIndicatorRow beat={beat} />

@@ -16,7 +16,8 @@ const Controls = ({
   recording,
   paused,
   bpm,
-  selectedSample
+  selectedSample,
+  onRandomiseClick
 }) => {
   const [volume, setVolume] = useState(0);
   const [pitch, setPitch] = useState(1);
@@ -96,6 +97,9 @@ const Controls = ({
             }}
           />
         </div>
+        <button className="controls__button controls__shuffle-button" onClick={onRandomiseClick}>
+          <i className="fa fa-random" />
+        </button>
       </div>
     </section>
   );

@@ -16,12 +16,6 @@ const StepRow = ({ beat }) => {
     <div className="step-indicator-row">
       <span className="step-row__title" />
       <div className="step-row__steps">{indicators}</div>
-      {
-        // hack for spacing
-      }
-      <button className="step-row__button">
-        <i className="fa fa-random hide" />
-      </button>
     </div>
   );
 };

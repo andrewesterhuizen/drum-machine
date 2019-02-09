@@ -1,14 +1,6 @@
 import React from "react";
 
-const StepRow = ({
-  onStepClick,
-  onTitleClick,
-  onRandomiseClick,
-  isPlaying,
-  sequence,
-  title,
-  selected
-}) => {
+const StepRow = ({ onStepClick, onTitleClick, isPlaying, sequence, title, selected }) => {
   const steps = [];
   for (let step = 0; step < 16; step++) {
     const cn = sequence[step] ? "step-button step-button--active" : "step-button";
@@ -26,9 +18,6 @@ const StepRow = ({
         {title}
       </span>
       <div className="step-row__steps">{steps}</div>
-      <button className="step-row__button" onClick={onRandomiseClick}>
-        <i className="fa fa-random" />
-      </button>
     </div>
   );
 };
