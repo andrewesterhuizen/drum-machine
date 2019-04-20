@@ -1,0 +1,35 @@
+{
+  "505": [
+    "bd.wav",
+    "clap.wav",
+    "congah.wav",
+    "congal.wav",
+    "cow.wav",
+    "cym.wav",
+    "hh.wav",
+    "hho.wav",
+    "ride.wav",
+    "rim.wav",
+    "sd.wav",
+    "tomh.wav",
+    "toml.wav",
+    "tomm.wav"
+  ],
+  "707": [
+    "bd1.wav",
+    "bd2.wav",
+    "cow.wav",
+    "crash.wav",
+    "hcp.wav",
+    "hhc.wav",
+    "hho.wav",
+    "ht.wav",
+    "lt.wav",
+    "mt.wav",
+    "ride.wav",
+    "rim.wav",
+    "sd1.wav",
+    "sd2.wav",
+    "tamb.wav"
+  ]
+}

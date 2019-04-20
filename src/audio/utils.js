@@ -1,11 +1,14 @@
-export const fetchSample = (context, path, name) =>
-  new Promise((resolve, reject) =>
+export const fetchSample = (context, path, name) => {
+  // console.log({ context });
+  console.log(path);
+  return new Promise((resolve, reject) =>
     fetch(path)
       .then(r => r.arrayBuffer())
       .then(buffer => context.decodeAudioData(buffer))
       .then(buffer => resolve({ buffer, name }))
       .catch(err => reject(err))
   );
+};
 
 export const initSequences = (rows = 10, steps = 16) => {
   return new Array(rows).fill().map(_ => new Array(steps).fill(false));
